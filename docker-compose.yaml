@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+
+  # flask application (3 replicas)
+  app:
+    build:
+      context: app
+    deploy:
+      replicas: 3
+
+  # control plane
+  control:
+    build:
+      context: control
+    deploy:
+      replicas: 2
+
+  # front-proxy
+  front-envoy:
+    build:
+      context: envoy
+    volumes:
+      - ./front-envoy.yaml:/etc/front-envoy.yaml
+    ports:
+    - "8080:8080"
+    - "8001:8001"
